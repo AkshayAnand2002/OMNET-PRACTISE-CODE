@@ -1,0 +1,54 @@
+1)ned file ---- architecture
+2)source file(filename.cc) --- functionality of architecture
+3)initialization file(.ini)
+----------------------------------------------------------
+#first.ned
+---------------->>>>
+simple coin
+{
+    gates:
+        input in;
+        output out;
+}
+
+network bitcoin
+{
+    @display("bgb=189,180");
+    submodules:
+        head: coin;
+        tail: coin {
+            @display("p=143,141");
+        }
+    connections:
+        head.out --> {  delay = 1s; } --> tail.in;
+        head.in <-- {  delay = 1s; } <-- tail.out;
+}
+---------------------------------------------------------------
+#working.cc
+----->>>>>>>>>>>>>>
+#include<string.h>
+#include<omnetpp.h>
+using namespace omnetpp;
+class coin : public cSimpleModule
+{
+protected:
+    virtual void initialize() override;
+    virtual void handleMessage(cMessage *msg) override;
+};
+Define_Module(coin);
+void coin::initialize()
+{
+    if(strcmp("head",getName())==0){
+        cMessage *msg=new cMessage("hello");
+        send(msg,"out");
+    }
+}
+void coin::handleMessage(cMessage *msg)
+{
+    send(msg,"out");
+}
+---------------------------------------
+#omnetpp.ini
+--->>>>
+Create new omnet file by rightclicking the filename.
+and do further steps.............................................
