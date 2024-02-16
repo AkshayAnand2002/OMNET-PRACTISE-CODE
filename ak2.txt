@@ -1,0 +1,59 @@
+1)simple module
+#NED creates only filename.ned but simple creates filename.h,filename.ned,filename.cc
+2)network file
+3)ini file
+4)then filename.cc is completed by filling functions
+-----------------------------------------------------------
+simple module made by right clicking on the filename.
+Father.ned  (simple)
+simple Father
+{
+    parameters:
+    	int id;
+    	gates:
+    	    input gate_input;
+    	    output gate_output;
+}
+-----------------------------------
+Father.cc
+will be filled later acc to steps.
+---------------------------------------------
+Father.h is automatically written
+--------------------------------------
+computerlab.ned(network file)
+
+network Compterlab
+{
+    submodules:
+        child1: Father {
+            id = 1;
+        }
+        child2: Father {
+            id = 2;
+        }
+    connections:
+        child1.gate_output --> child2.gate_input;
+        child2.gate_output --> child1.gate_input;
+}
+------------------------------------------------------------
+omnetpp.ini file is made by rightclicking on filename.
+-------------------------------------------------------------
+Father.cc (filename.cc is completed)
+#include "Father.h"
+
+Define_Module(Father);
+
+void Father::initialize()
+{
+    if(strcmp("child1",getName())==0){
+        cMessage *msg=new cMessage("Hello");
+        send(msg,"gate_output");
+    }
+}
+
+void Father::handleMessage(cMessage *msg)
+{
+    send(msg,"gate_output");
+}
+---------------------------------------
+running and so on.......
